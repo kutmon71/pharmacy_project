@@ -4,17 +4,28 @@ using namespace std;
 
 void Login()
 {
-   string Account_Type = "0", Name = "0", Password = "0";
-   cout << "Для запуска программы, пожалуйста введите тип аккаунта, логин и пароль:";
-   while ((Account_Type != "Farmworker" && Name != "Farmworker1" && Password != "FarmworkerPassword") || (Account_Type != "Supplier" && Name != "Supplier1" && Password != "SupplierPassword"))
+   string AccountType, Name, Password;
+   cout << "To start the program, please enter your username and password: \n";
+   while (true)
    {
-      cout << "Тип аккаунта: ";
-      cin >> Account_Type;
-      cout << "Логин: ";
+      cout << "Login: ";
       cin >> Name;
-      cout << "Пароль: ";
+      cout << "Password: ";
       cin >> Password;
-      cout << "Извините, но мы не нашли такой тип аккаунта или у вас неправильно введены логин и/или пароль пожалуйста повторите.\n";
+      if (Name == "Farmworker1" && Password == "FarmworkerPassword")
+      {
+         AccountType = "Farmworker";
+         break;
+      }
+      else if (Name == "Supplier1" && Password == "SupplierPassword")
+      {
+         AccountType = "Supplier1";
+         break;
+      }
+      else
+      {
+         cout << "Sorry, but we did not find this type of account, your username and/or password were entered incorrectly, please try again.\n";
+      }
    }
 }
 
