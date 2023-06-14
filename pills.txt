@@ -1,0 +1,3 @@
+pill1 3
+pill2 1
+pill3 1

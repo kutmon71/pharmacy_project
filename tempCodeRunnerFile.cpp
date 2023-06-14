@@ -1,0 +1,3 @@
+void rin(){
+   cout << "uuu";
+}
