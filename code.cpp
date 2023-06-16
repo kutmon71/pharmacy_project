@@ -3,13 +3,13 @@
 #include <limits>
 #include <string>
 
-
 using namespace std;
 
 string AccountType;
 int OperationSelection;
 
-struct Pill{
+struct Pill
+{
    string Name;
    int Price;
    int Quantity;
@@ -63,32 +63,32 @@ void Menu()
 
          switch (OperationSelection)
          {
-            case 1:
-               Search();
-               break;
-            case 2:
-               ListOfMedications();
-               break;
-            case 3:
-               ChangePrice();
-               break;
-            case 4:
-               Sell();
-               break;
-            case 5:
-               Stock();
-               break;
-            case 6:
-               Order();
-               break;
-            case 7:
-               Information();
-               break;
-            case 8:
-               break;
-            default:
-               cout << "Please choose from the options provided.";
-               break;
+         case 1:
+            Search();
+            break;
+         case 2:
+            ListOfMedications();
+            break;
+         case 3:
+            ChangePrice();
+            break;
+         case 4:
+            Sell();
+            break;
+         case 5:
+            Stock();
+            break;
+         case 6:
+            Order();
+            break;
+         case 7:
+            Information();
+            break;
+         case 8:
+            break;
+         default:
+            cout << "Please choose from the options provided.";
+            break;
          }
       }
       else
@@ -106,74 +106,82 @@ void Menu()
 
          switch (OperationSelection)
          {
-            case 1:
-               ListOfMedications();
-               break;
-            case 2:
-               MedicineForDelivery();
-               break;
-            case 3:
-               DeliverMedicine();
-               break;
-            case 4:
-               DeliveredMedicines();
-               break;
-            case 5:
-               Information();
-               break;
-            case 6:
-               break;
-            default:
-               cout << "Please choose from the options provided.";
-               break;
+         case 1:
+            ListOfMedications();
+            break;
+         case 2:
+            MedicineForDelivery();
+            break;
+         case 3:
+            DeliverMedicine();
+            break;
+         case 4:
+            DeliveredMedicines();
+            break;
+         case 5:
+            Information();
+            break;
+         case 6:
+            break;
+         default:
+            cout << "Please choose from the options provided.";
+            break;
          }
       }
    } while (OperationSelection != 8);
 }
 
-void ListOfMedications(){
+void ListOfMedications()
+{
    string Pills;
    ifstream PillsFile("pills.txt");
-   while (getline (PillsFile, Pills)){
+   while (getline(PillsFile, Pills))
+   {
       cout << Pills << endl;
    }
    PillsFile.close();
 }
 
-void Stock(){/
-      cout << R"(
+void Stock()
+{
+   /
+           cout
+       << R"(
          1. Show the medicine with the lowest amount
          2. Show the medicine with the most
          3. Show medicine with an amount equal to 0
          4. Show all amounts of the medicine
       )";
-      cin >> OperationSelection;
-      switch (OperationSelection)
-      {
-      case 1:
-         StockLowest();
-         break;
-      case 2:
-         StockMost();
-         break;
-      case 3:
-         StockZero;
-         break;
-      case 4:
-         StockAmount;
-         break; 
-      default:
-         break;
-      }
+   cin >> OperationSelection;
+   switch (OperationSelection)
+   {
+   case 1:
+      StockLowest();
+      break;
+   case 2:
+      StockMost();
+      break;
+   case 3:
+      StockZero;
+      break;
+   case 4:
+      StockAmount;
+      break;
+   default:
+      break;
+   }
 }
 
-void StockLowest(){
+void StockLowest()
+{
    ifstream PillsFfile("pills.txt");
    Pill minQuantityMedicine, medicine;
    minQuantityMedicine = numeric_limits<int>::max();
 
-   while(PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity){
-      if(medicine.Quantity < minQuantityMedicine.Quantity){
+   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   {
+      if (medicine.Quantity < minQuantityMedicine.Quantity)
+      {
          minQuantityMedicine = medicine;
       }
    }
@@ -184,13 +192,16 @@ void StockLowest(){
    cout << minQuantityMedicine.Name << " " << minQuantityMedicine.Quantity;
 }
 
-void StockMost(){
+void StockMost()
+{
    ifstream PillsFfile("pills.txt");
    Pill maxQuantityMedicine, medicine;
    maxQuantityMedicine = numeric_limits<int>::min();
 
-   while(PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity){
-      if(medicine.Quantity > maxQuantityMedicine.Quantity){
+   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   {
+      if (medicine.Quantity > maxQuantityMedicine.Quantity)
+      {
          maxQuantityMedicine = medicine;
       }
    }
@@ -200,28 +211,103 @@ void StockMost(){
    cout << maxQuantityMedicine.Name << " " << maxQuantityMedicine.Quantity;
 }
 
-void StockZero(){
+void StockZero()
+{
    cout << "Medicine with an amount equal to 0: \n";
    ifstream PillsFile("pills.txt");
    Pill medicine;
-   while(PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity){
-      if(medicine.Quantity == 0){
+   while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   {
+      if (medicine.Quantity == 0)
+      {
          cout << medicine.Name << endl;
       }
    }
    PillsFile.close();
 }
 
-void StockAmount(){
+void StockAmount()
+{
    ifstream PillsFile("pills.txt");
    Pill medicine;
    int amount = 0;
-   while(PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity){
+   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   {
       amount += medicine.Quantity;
    }
    PillsFile.close();
 
    cout << "All amounts of the medicine: " << amount;
+}
+
+void Search()
+{
+   cout << "Enter a search query: \n";
+   string line, medicineName;
+   cin >> medicineName;
+   bool found = false;
+   ifstream PillsFile("pills.txt");
+   while (getline(PillsFile, line))
+   {
+      if (line.find(medicineName) != string ::npos)
+      {
+         cout << "Result: \n"
+              << line << endl;
+         found = true;
+      }
+   }
+
+   if (!found)
+   {
+      cout << "The medication was not found \n";
+   }
+   PillsFile.close();
+}
+
+void ChangePrice()
+{
+   vector<Pill> pillsVector;
+   Pill medicine;
+   string pillName;
+   int newPrice;
+   bool found = false;
+
+   cout << "Enter the name of the medicine whose price you want to change: ";
+   cin >> pillName;
+   cout << "Enter a new price: ";
+   cin >> newPrice;
+
+   ifstream file("pills.txt");
+   while (file >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   {
+      pillsVector.push_back(medicine);
+   }
+   file.close();
+
+   for (auto &medicine : pillsVector)
+   {
+      if (medicine.Name == pillName)
+      {
+         medicine.Price = newPrice;
+         found = true;
+         break;
+      }
+   }
+
+   ofstream outfile("pills.txt");
+   for (const auto &medicine : pillsVector)
+   {
+      outfile << medicine.Name << " " << medicine.Price << " " << medicine.Quantity << endl;
+   }
+   outfile.close();
+   if (!found)
+   {
+      cout << "The medication you were looking for was not found";
+   }
+   else
+   {
+      cout << "The price of the medicine has been successfully changed" << endl;
+   }
 }
 
 int main()
