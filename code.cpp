@@ -2,6 +2,7 @@
 #include <fstream>
 #include <limits>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -144,9 +145,7 @@ void ListOfMedications()
 
 void Stock()
 {
-   /
-           cout
-       << R"(
+   cout<< R"(
          1. Show the medicine with the lowest amount
          2. Show the medicine with the most
          3. Show medicine with an amount equal to 0
@@ -196,7 +195,7 @@ void StockMost()
 {
    ifstream PillsFfile("pills.txt");
    Pill maxQuantityMedicine, medicine;
-   maxQuantityMedicine = numeric_limits<int>::min();
+   maxQuantityMedicine.Quantity = numeric_limits<int>::min();
 
    while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
    {
@@ -231,7 +230,7 @@ void StockAmount()
    ifstream PillsFile("pills.txt");
    Pill medicine;
    int amount = 0;
-   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
    {
       amount += medicine.Quantity;
    }
@@ -251,8 +250,7 @@ void Search()
    {
       if (line.find(medicineName) != string ::npos)
       {
-         cout << "Result: \n"
-              << line << endl;
+         cout << "Result: \n"<< line << endl;
          found = true;
       }
    }
@@ -308,6 +306,20 @@ void ChangePrice()
    {
       cout << "The price of the medicine has been successfully changed" << endl;
    }
+}
+
+void Order(){
+   Pill medicine;
+   cout << "Write the name of the medicine: ";
+   cin >> medicine.Name;
+   cout << "Write the quantity for the order: ";
+   cin >> medicine.Quantity;
+
+   ofstream orderFile("supply_new.txt", ios::app);
+   orderFile << endl << medicine.Name << " " << medicine.Quantity;
+   orderFile.close();
+
+   cout << "The information was successfully added to the file";
 }
 
 int main()
