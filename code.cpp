@@ -3,6 +3,8 @@
 #include <limits>
 #include <string>
 #include <vector>
+#include <ctime>
+#include <iomanip>
 
 using namespace std;
 
@@ -320,6 +322,90 @@ void Order(){
    orderFile.close();
 
    cout << "The information was successfully added to the file";
+}
+
+void Sell()
+{
+   string medicineName;
+   int quantity;
+   char discountChoice;
+   double discount;
+   char sellMoreChoice;
+   do{
+
+      cout << "Specify the name of the medicine for sale: ";
+      cin >> medicineName;
+      cout << "Specify the quantity: ";
+      cin >> quantity;
+      cout << "Is there a discount?(Y/N)";
+      cin >> discountChoice;
+      if (discountChoice == 'Y' || discountChoice == 'y')
+      {
+         cout << "Enter the discount percentage: ";
+         cin >> discount;
+      }
+      else
+      {
+         discount = 0.0;
+      }
+
+      Pill medicine;
+      bool found = false;
+      ifstream PillsFile("pills.txt");
+      while(PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity){
+         if(medicine.Name == medicineName){
+            found = true;
+            if(medicine.Quantity < quantity){
+               cerr << "Insufficient stock for " << medicineName << endl;
+               PillsFile.close();
+               return 1;
+            }
+            break;
+         }
+      }
+      PillsFile.close();
+
+      if(!found){
+         cerr << "Medicine not found: " << medicine.Name << endl;
+         return 1;
+      }
+
+      Pill soldMedicine;
+      //ifstream PillsFile("pills.txt");
+      ofstream tempFile("temp.txt");
+      while (PillsFile >> soldMedicine.Name >> soldMedicine.Price >> soldMedicine.Quantity)
+      {
+         if(soldMedicine.Name == medicineName){
+            soldMedicine.Quantity -= quantity;
+         }
+         tempFile << soldMedicine.Name << " " << soldMedicine.Price << " " << soldMedicine.Quantity;
+      }
+
+      PillsFile.close();
+      tempFile.close();
+
+      string pillsFileName = "pills.txt";
+      string tempFileName = "temp.txt";
+      remove(pillsFileName.c_str());
+      rename(tempFileName.c_str(), pillsFileName.c_str());
+      
+      ofstream SalesFile("sales.txt");
+
+      time_t now = time(0);
+      tm* localTime = localtime(&now);
+      char dateTime[50];
+      strftime(dateTime, sizeof(dateTime), "%Y-%m-%d %h:%M:%S", localTime);
+
+      double totalCost = (medicine.Price * quantity) * (1 - discount);
+      SalesFile << medicine.Name << " " << medicine.Price << " " << quantity << " " << fixed << setprecision(2) << totalCost << " " << dateTime << endl;
+
+      SalesFile.close();
+
+      cout << "Medicine sold successfully!" << endl << "Sell more medicine? (Y/N): ";
+      cin >> sellMoreChoice;
+
+   }while(sellMoreChoice == 'Y' || sellMoreChoice == 'y');
+   return 0;
 }
 
 int main()
