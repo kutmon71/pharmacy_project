@@ -438,6 +438,51 @@ void DeliveredMedicines(){
    DeliveredMedicinesFile.close();
 }
 
+void DeliverMedicine(){
+   char deliverMoreChoice;
+   do{
+      string medicineName;
+      int quantity;
+      bool found = false;
+      cout << "Please enter the name of the medicine to be delivered: \n";
+      cin >> medicineName;
+      cout << " Please write the quantity to be delivered: ";
+      cin >> quantity;
+
+      time_t now = time(0);
+      tm* localTime = localtime(&now);
+      char dateTime[50];
+      strftime(dateTime, sizeof(dateTime), "%Y-%m-%d %H:%M:%S", localTime);
+
+      ofstream DeliverFile("delivered_farm.txt", ios::app);
+      DeliverFile << medicineName << " " << quantity << " " << dateTime << endl;
+      DeliverFile.close();
+
+      Pill Medicine;
+      ifstream PillsFile("pills.txt");
+      ofstream TempFile("temp.txt");
+      while(PillsFile >> Medicine.Name >> Medicine.Price >> Medicine.Quantity){
+         if(Medicine.Name == medicineName){
+            found = true;
+            Medicine.Quantity += quantity;
+         }
+         TempFile << Medicine.Name << " " << Medicine.Price << " " << Medicine.Quantity << endl;
+      }
+      PillsFile.close();
+      TempFile.close();
+
+      string PillsFileName = "pills.txt", TempFileName = "temp.txt";
+      remove(PillsFileName.c_str());
+      rename(TempFileName.c_str(), PillsFileName.c_str());
+
+      if(!found){
+         cout << "The desired medicine was not found \n";
+         break;
+      }
+      cout << "Successfully delivered! \n Deliver more medicines?(Y/N): ";
+      cin >> deliverMoreChoice;
+   }while(deliverMoreChoice == 'y' || deliverMoreChoice == 'Y');
+}
 
 int main()
 {
