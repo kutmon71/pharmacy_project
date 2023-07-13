@@ -428,6 +428,17 @@ void MedicineForDelivery(){
    SupplyNewFile.close();
 }
 
+void DeliveredMedicines(){
+   ifstream DeliveredMedicinesFile("delivered_farm.txt");
+   string Pills;
+   while (getline(DeliveredMedicinesFile, Pills))
+   {
+      cout << Pills << endl;
+   }
+   DeliveredMedicinesFile.close();
+}
+
+
 int main()
 {
    Login();
