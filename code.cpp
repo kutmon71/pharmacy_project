@@ -408,6 +408,26 @@ void Sell()
    return 0;
 }
 
+void MedicineForDelivery(){
+   Pill Medicine;
+   ifstream PillsFile("pills.txt");
+   cout << "Ьedicines with zero quantity value in stock: \n";
+   while(PillsFile >> Medicine.Name >> Medicine.Price >> Medicine.Quantity){
+      if(Medicine.Quantity == 0){
+         cout << Medicine.Name << endl;
+      }
+   }
+   PillsFile.close();
+
+   ifstream SupplyNewFile("supply_new.txt");
+   string Pills;
+   while (getline(SupplyNewFile, Pills))
+   {
+      cout << Pills << endl;
+   }
+   SupplyNewFile.close();
+}
+
 int main()
 {
    Login();
