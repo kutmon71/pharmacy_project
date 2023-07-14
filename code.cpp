@@ -48,6 +48,12 @@ void ListOfMedications()
 {
    string Pills;
    ifstream PillsFile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    while (getline(PillsFile, Pills))
    {
       cout << Pills << endl;
@@ -93,6 +99,12 @@ void Stock()
 void StockLowest()
 {
    ifstream PillsFfile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    Pill minQuantityMedicine, medicine;
    minQuantityMedicine.Quantity = numeric_limits<int>::max();
 
@@ -113,6 +125,12 @@ void StockLowest()
 void StockMost()
 {
    ifstream PillsFfile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    Pill maxQuantityMedicine, medicine;
    maxQuantityMedicine.Quantity = numeric_limits<int>::min();
 
@@ -133,6 +151,12 @@ void StockZero()
 {
    cout << "Medicine with an amount equal to 0: \n";
    ifstream PillsFile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    Pill medicine;
    while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
    {
@@ -147,6 +171,12 @@ void StockZero()
 void StockAmount()
 {
    ifstream PillsFile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    Pill medicine;
    int amount = 0;
    while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
@@ -165,6 +195,12 @@ void Search()
    cin >> medicineName;
    bool found = false;
    ifstream PillsFile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    while (getline(PillsFile, line))
    {
       if (line.find(medicineName) != string ::npos)
@@ -195,6 +231,12 @@ void ChangePrice()
    cin >> newPrice;
 
    ifstream file("pills.txt");
+
+   if(!file){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    while (file >> medicine.Name >> medicine.Price >> medicine.Quantity)
    {
       pillsVector.push_back(medicine);
@@ -269,6 +311,12 @@ void Sell()
       Pill medicine;
       bool found = false;
       ifstream PillsFile("pills.txt");
+
+      if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
       while(PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity){
          if(medicine.Name == medicineName){
             found = true;
@@ -289,6 +337,12 @@ void Sell()
 
       Pill soldMedicine;
       ifstream PillsFile("pills.txt");
+
+      if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+      }
+
       ofstream tempFile("temp.txt");
       while (PillsFile >> soldMedicine.Name >> soldMedicine.Price >> soldMedicine.Quantity)
       {
@@ -305,6 +359,16 @@ void Sell()
       string tempFileName = "temp.txt";
       remove(pillsFileName.c_str());
       rename(tempFileName.c_str(), pillsFileName.c_str());
+
+      if(remove(pillsFileName.c_str()) != 0){
+         cerr << "Failed to delete " << pillsFileName << endl;
+         return;
+      }
+
+      if(rename(tempFileName.c_str(), pillsFileName.c_str()) != 0){
+         cerr << "Failed to rename " << tempFileName << " to " << pillsFileName << endl;
+         return;
+      }
       
       ofstream SalesFile("sales.txt");
 
@@ -327,6 +391,12 @@ void Sell()
 void MedicineForDelivery(){
    Pill Medicine;
    ifstream PillsFile("pills.txt");
+
+   if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+   }
+
    cout << "Ьedicines with zero quantity value in stock: \n";
    while(PillsFile >> Medicine.Name >> Medicine.Price >> Medicine.Quantity){
       if(Medicine.Quantity == 0){
@@ -336,6 +406,12 @@ void MedicineForDelivery(){
    PillsFile.close();
 
    ifstream SupplyNewFile("supply_new.txt");
+
+   if(!SupplyNewFile){
+      cerr << "Failed to open supply_new.txt" << endl;
+      return;
+   }
+
    string Pills;
    while (getline(SupplyNewFile, Pills))
    {
@@ -346,6 +422,12 @@ void MedicineForDelivery(){
 
 void DeliveredMedicines(){
    ifstream DeliveredMedicinesFile("delivered_farm.txt");
+
+   if(!DeliveredMedicinesFile){
+      cerr << "Failed to open delivered_farm.txt" << endl;
+      return;
+   }
+
    string Pills;
    while (getline(DeliveredMedicinesFile, Pills))
    {
@@ -376,6 +458,12 @@ void DeliverMedicine(){
 
       Pill Medicine;
       ifstream PillsFile("pills.txt");
+
+      if(!PillsFile){
+      cerr << "Failed to open pills.txt" << endl;
+      return;
+      }
+
       ofstream TempFile("temp.txt");
       while(PillsFile >> Medicine.Name >> Medicine.Price >> Medicine.Quantity){
          if(Medicine.Name == medicineName){
@@ -390,6 +478,16 @@ void DeliverMedicine(){
       string PillsFileName = "pills.txt", TempFileName = "temp.txt";
       remove(PillsFileName.c_str());
       rename(TempFileName.c_str(), PillsFileName.c_str());
+
+      if(remove(PillsFileName.c_str()) != 0){
+         cerr << "Failed to delete " << PillsFileName << endl;
+         return;
+      }
+
+      if(rename(TempFileName.c_str(), PillsFileName.c_str()) != 0){
+         cerr << "Failed to rename " << TempFileName << " to " << PillsFileName << endl;
+         return;
+      }
 
       if(!found){
          cout << "The desired medicine was not found \n";
