@@ -9,7 +9,6 @@
 using namespace std;
 
 string AccountType;
-int OperationSelection;
 
 struct Pill
 {
@@ -44,96 +43,6 @@ void Login()
    }
 }
 
-void Menu()
-{
-   cin >> OperationSelection;
-   do
-   {
-      if (AccountType == "Farmworker")
-      {
-         cout << R"(
-            Greetings dear Pharmacist! Please dial the menu number to work with the program, if finished, then dial 8:
-
-         1. Search for medicines
-         2. Show the full list of medications
-         3. Change the price for the medicine
-         4. Sell the medicine
-         5. Show the stock of medicines
-         6. Order medicine
-         7. Show information about the program 
-         8. Exit
-         )";
-
-         switch (OperationSelection)
-         {
-         case 1:
-            Search();
-            break;
-         case 2:
-            ListOfMedications();
-            break;
-         case 3:
-            ChangePrice();
-            break;
-         case 4:
-            Sell();
-            break;
-         case 5:
-            Stock();
-            break;
-         case 6:
-            Order();
-            break;
-         case 7:
-            Information();
-            break;
-         case 8:
-            break;
-         default:
-            cout << "Please choose from the options provided.";
-            break;
-         }
-      }
-      else
-      { // that mean AccountType is Supplier
-         cout << R"(
-            Greetings dear Supplier! Please dial the menu number to work with the program, if finished, then dial 6:
-
-         1. Show a list of the entire list of medicines from pharmacies
-         2. Show the medicine required for delivery
-         3. Deliver the medicine
-         4. Show the delivered medicines
-         5. Show information about the program
-         6. Exit
-         )";
-
-         switch (OperationSelection)
-         {
-         case 1:
-            ListOfMedications();
-            break;
-         case 2:
-            MedicineForDelivery();
-            break;
-         case 3:
-            DeliverMedicine();
-            break;
-         case 4:
-            DeliveredMedicines();
-            break;
-         case 5:
-            Information();
-            break;
-         case 6:
-            break;
-         default:
-            cout << "Please choose from the options provided.";
-            break;
-         }
-      }
-   } while (OperationSelection != 8);
-}
-
 void ListOfMedications()
 {
    string Pills;
@@ -147,12 +56,19 @@ void ListOfMedications()
 
 void Stock()
 {
+   void StockLowest();
+   void StockMost();
+   void StockZero();
+   void StockAmount();
+
    cout<< R"(
          1. Show the medicine with the lowest amount
          2. Show the medicine with the most
          3. Show medicine with an amount equal to 0
          4. Show all amounts of the medicine
       )";
+
+   int OperationSelection;
    cin >> OperationSelection;
    switch (OperationSelection)
    {
@@ -177,7 +93,7 @@ void StockLowest()
 {
    ifstream PillsFfile("pills.txt");
    Pill minQuantityMedicine, medicine;
-   minQuantityMedicine = numeric_limits<int>::max();
+   minQuantityMedicine.Quantity = numeric_limits<int>::max();
 
    while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
    {
@@ -358,16 +274,16 @@ void Sell()
             if(medicine.Quantity < quantity){
                cerr << "Insufficient stock for " << medicineName << endl;
                PillsFile.close();
-               return 1;
+               return;
             }
-            break;
+            break;   
          }
       }
       PillsFile.close();
 
       if(!found){
          cerr << "Medicine not found: " << medicine.Name << endl;
-         return 1;
+         return;
       }
 
       Pill soldMedicine;
@@ -405,7 +321,6 @@ void Sell()
       cin >> sellMoreChoice;
 
    }while(sellMoreChoice == 'Y' || sellMoreChoice == 'y');
-   return 0;
 }
 
 void MedicineForDelivery(){
