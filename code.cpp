@@ -17,6 +17,7 @@ struct Pill
    int Quantity;
 };
 
+
 void Login()
 {
    string Name, Password;
@@ -282,19 +283,19 @@ void Sell()
       PillsFile.close();
 
       if(!found){
-         cerr << "Medicine not found: " << medicine.Name << endl;
+         cerr << "Medicine not found: " << medicineName << endl;
          return;
       }
 
       Pill soldMedicine;
-      //ifstream PillsFile("pills.txt");
+      ifstream PillsFile("pills.txt");
       ofstream tempFile("temp.txt");
       while (PillsFile >> soldMedicine.Name >> soldMedicine.Price >> soldMedicine.Quantity)
       {
          if(soldMedicine.Name == medicineName){
             soldMedicine.Quantity -= quantity;
          }
-         tempFile << soldMedicine.Name << " " << soldMedicine.Price << " " << soldMedicine.Quantity;
+         tempFile << soldMedicine.Name << " " << soldMedicine.Price << " " << soldMedicine.Quantity << endl;
       }
 
       PillsFile.close();
@@ -415,6 +416,7 @@ Note:
 void Logout(){
    cout << "The program is completed, we will be glad to see you back! \n";
 }
+
 
 int main()
 {
