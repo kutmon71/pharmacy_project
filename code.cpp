@@ -94,10 +94,10 @@ void Stock()
       StockMost();
       break;
    case 3:
-      StockZero;
+      StockZero();
       break;
    case 4:
-      StockAmount;
+      StockAmount();
       break;
    default:
       break;
@@ -109,7 +109,7 @@ void Stock()
 
       // function for withdrawal of the medicine with the least amount in stock
 
-      ifstream PillsFfile("pills.txt");
+      ifstream PillsFile("pills.txt");
 
       if(!PillsFile){
          cerr << "Failed to open pills.txt" << endl;
@@ -119,7 +119,7 @@ void Stock()
       Pill minQuantityMedicine, medicine;
       minQuantityMedicine.Quantity = numeric_limits<int>::max();
 
-      while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+      while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
       {
          if (medicine.Quantity < minQuantityMedicine.Quantity)
          {
@@ -127,7 +127,7 @@ void Stock()
          }
       }
 
-      PillsFfile.close();
+      PillsFile.close();
 
       cout << "The medicine with the least amount:" << endl;
       cout << minQuantityMedicine.Name << " " << minQuantityMedicine.Quantity;
@@ -138,7 +138,7 @@ void Stock()
 
       // function for withdrawal of the medicine with the largest amount in stock
 
-      ifstream PillsFfile("pills.txt");
+      ifstream PillsFile("pills.txt");
 
       if(!PillsFile){
          cerr << "Failed to open pills.txt" << endl;
@@ -148,14 +148,14 @@ void Stock()
       Pill maxQuantityMedicine, medicine;
       maxQuantityMedicine.Quantity = numeric_limits<int>::min();
 
-      while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+      while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
       {
          if (medicine.Quantity > maxQuantityMedicine.Quantity)
          {
             maxQuantityMedicine = medicine;
          }
       }
-      PillsFfile.close();
+      PillsFile.close();
 
       cout << "The medicine with the most amount:" << endl;
       cout << maxQuantityMedicine.Name << " " << maxQuantityMedicine.Quantity;
@@ -165,23 +165,27 @@ void Stock()
    {
 
       // a function for the output of a medicine whose quantity is 0
-      cout << "Medicine with an amount equal to 0: \n";
+      
       ifstream PillsFile("pills.txt");
 
       if(!PillsFile){
          cerr << "Failed to open pills.txt" << endl;
          return;
       }
-
+      bool found = false;
       Pill medicine;
       while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
       {
          if (medicine.Quantity == 0)
          {
-            cout << medicine.Name << endl;
+            cout << "Medicine with an amount equal to 0:" << medicine.Name << endl;
+            found = true;
          }
       }
       PillsFile.close();
+      if (!found) {
+         cout << "There are no medicines with an amount equal to 0 \n";
+      }
    }
 
    void StockAmount()
@@ -322,7 +326,7 @@ void Sell()
       cin >> medicineName;
       cout << "Specify the quantity: ";
       cin >> quantity;
-      cout << "Is there a discount?(Y/N)";
+      cout << "Is there a discount?(Y/N): ";
       cin >> discountChoice;
       if (discountChoice == 'Y' || discountChoice == 'y')
       {
@@ -362,15 +366,15 @@ void Sell()
       }
 
       Pill soldMedicine;
-      ifstream PillsFile("pills.txt");
+      ifstream PillsFile2("pills.txt");
 
-      if(!PillsFile){
+      if(!PillsFile2){
       cerr << "Failed to open pills.txt" << endl;
       return;
       }
 
       ofstream tempFile("temp.txt");
-      while (PillsFile >> soldMedicine.Name >> soldMedicine.Price >> soldMedicine.Quantity)
+      while (PillsFile2 >> soldMedicine.Name >> soldMedicine.Price >> soldMedicine.Quantity)
       {
          if(soldMedicine.Name == medicineName){
             soldMedicine.Quantity -= quantity;
@@ -378,14 +382,11 @@ void Sell()
          tempFile << soldMedicine.Name << " " << soldMedicine.Price << " " << soldMedicine.Quantity << endl;
       }
 
-      PillsFile.close();
+      PillsFile2.close();
       tempFile.close();
 
       string pillsFileName = "pills.txt";
       string tempFileName = "temp.txt";
-      remove(pillsFileName.c_str());
-      rename(tempFileName.c_str(), pillsFileName.c_str());
-
       if(remove(pillsFileName.c_str()) != 0){
          cerr << "Failed to delete " << pillsFileName << endl;
          return;
@@ -396,14 +397,14 @@ void Sell()
          return;
       }
       
-      ofstream SalesFile("sales.txt");
+      ofstream SalesFile("sales.txt", ios::app);
 
       time_t now = time(0);
       tm* localTime = localtime(&now);
       char dateTime[50];
       strftime(dateTime, sizeof(dateTime), "%Y-%m-%d %h:%M:%S", localTime);
 
-      double totalCost = (medicine.Price * quantity) * (1 - discount);
+      double totalCost = (medicine.Price * quantity) * (1 - discount / 100);
       SalesFile << medicine.Name << " " << medicine.Price << " " << quantity << " " << fixed << setprecision(2) << totalCost << " " << dateTime << endl;
 
       SalesFile.close();
@@ -508,8 +509,6 @@ void DeliverMedicine(){
       TempFile.close();
 
       string PillsFileName = "pills.txt", TempFileName = "temp.txt";
-      remove(PillsFileName.c_str());
-      rename(TempFileName.c_str(), PillsFileName.c_str());
 
       if(remove(PillsFileName.c_str()) != 0){
          cerr << "Failed to delete " << PillsFileName << endl;
@@ -558,13 +557,12 @@ int main()
 {
    Login();
    int OperationSelection;
-   cin >> OperationSelection;
    do
    {
       if (AccountType == "Farmworker")
       {
          cout << R"(
-            Greetings dear Pharmacist! Please dial the menu number to work with the program, if finished, then dial 8:
+            Greetings dear Pharmacist! Please dial the menu number to work with the program, if finished, then dial 0:
 
          1. Search for medicines
          2. Show the full list of medications
@@ -574,9 +572,9 @@ int main()
          6. Order medicine
          7. Show information about the program 
 
-         0. Exit
-         )";
-
+         0. Exit)";
+         cout << endl << "The operation you want to perform: ";
+         cin >> OperationSelection;
          switch (OperationSelection)
          {
          case 1:
@@ -610,7 +608,7 @@ int main()
       else
       { // AccountType is Supplier
          cout << R"(
-            Greetings dear Supplier! Please dial the menu number to work with the program, if finished, then dial 6:
+            Greetings dear Supplier! Please dial the menu number to work with the program, if finished, then dial 0:
 
          1. Show a list of the entire list of medicines from pharmacies
          2. Show the medicine required for delivery
@@ -620,7 +618,8 @@ int main()
 
          0. Exit
          )";
-
+         cout << endl << "The operation you want to perform : ";
+         cin >> OperationSelection;
          switch (OperationSelection)
          {
          case 1:
