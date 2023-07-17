@@ -19,7 +19,9 @@ struct Pill
 
 
 void Login()
-{
+{ 
+   //a function for logging into the account of a pharmacist or a deliverer
+   
    string Name, Password;
    cout << "To start the program, please enter your username and password: \n";
    while (true)
@@ -44,8 +46,11 @@ void Login()
    }
 }
 
+
 void ListOfMedications()
-{
+{ 
+   // a function for displaying a list of all medications
+
    string Pills;
    ifstream PillsFile("pills.txt");
 
@@ -63,6 +68,9 @@ void ListOfMedications()
 
 void Stock()
 {
+   // function for viewing medicines in stock
+   
+   // Declaration of a nested function
    void StockLowest();
    void StockMost();
    void StockZero();
@@ -96,80 +104,90 @@ void Stock()
    }
 }
 
-void StockLowest()
-{
-   ifstream PillsFfile("pills.txt");
-
-   if(!PillsFile){
-      cerr << "Failed to open pills.txt" << endl;
-      return;
-   }
-
-   Pill minQuantityMedicine, medicine;
-   minQuantityMedicine.Quantity = numeric_limits<int>::max();
-
-   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   void StockLowest()
    {
-      if (medicine.Quantity < minQuantityMedicine.Quantity)
-      {
-         minQuantityMedicine = medicine;
+
+      // function for withdrawal of the medicine with the least amount in stock
+
+      ifstream PillsFfile("pills.txt");
+
+      if(!PillsFile){
+         cerr << "Failed to open pills.txt" << endl;
+         return;
       }
+
+      Pill minQuantityMedicine, medicine;
+      minQuantityMedicine.Quantity = numeric_limits<int>::max();
+
+      while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+      {
+         if (medicine.Quantity < minQuantityMedicine.Quantity)
+         {
+            minQuantityMedicine = medicine;
+         }
+      }
+
+      PillsFfile.close();
+
+      cout << "The medicine with the least amount:" << endl;
+      cout << minQuantityMedicine.Name << " " << minQuantityMedicine.Quantity;
    }
 
-   PillsFfile.close();
-
-   cout << "The medicine with the least amount:" << endl;
-   cout << minQuantityMedicine.Name << " " << minQuantityMedicine.Quantity;
-}
-
-void StockMost()
-{
-   ifstream PillsFfile("pills.txt");
-
-   if(!PillsFile){
-      cerr << "Failed to open pills.txt" << endl;
-      return;
-   }
-
-   Pill maxQuantityMedicine, medicine;
-   maxQuantityMedicine.Quantity = numeric_limits<int>::min();
-
-   while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   void StockMost()
    {
-      if (medicine.Quantity > maxQuantityMedicine.Quantity)
-      {
-         maxQuantityMedicine = medicine;
+
+      // function for withdrawal of the medicine with the largest amount in stock
+
+      ifstream PillsFfile("pills.txt");
+
+      if(!PillsFile){
+         cerr << "Failed to open pills.txt" << endl;
+         return;
       }
+
+      Pill maxQuantityMedicine, medicine;
+      maxQuantityMedicine.Quantity = numeric_limits<int>::min();
+
+      while (PillsFfile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+      {
+         if (medicine.Quantity > maxQuantityMedicine.Quantity)
+         {
+            maxQuantityMedicine = medicine;
+         }
+      }
+      PillsFfile.close();
+
+      cout << "The medicine with the most amount:" << endl;
+      cout << maxQuantityMedicine.Name << " " << maxQuantityMedicine.Quantity;
    }
-   PillsFfile.close();
 
-   cout << "The medicine with the most amount:" << endl;
-   cout << maxQuantityMedicine.Name << " " << maxQuantityMedicine.Quantity;
-}
-
-void StockZero()
-{
-   cout << "Medicine with an amount equal to 0: \n";
-   ifstream PillsFile("pills.txt");
-
-   if(!PillsFile){
-      cerr << "Failed to open pills.txt" << endl;
-      return;
-   }
-
-   Pill medicine;
-   while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+   void StockZero()
    {
-      if (medicine.Quantity == 0)
-      {
-         cout << medicine.Name << endl;
-      }
-   }
-   PillsFile.close();
-}
 
-void StockAmount()
+      // a function for the output of a medicine whose quantity is 0
+      cout << "Medicine with an amount equal to 0: \n";
+      ifstream PillsFile("pills.txt");
+
+      if(!PillsFile){
+         cerr << "Failed to open pills.txt" << endl;
+         return;
+      }
+
+      Pill medicine;
+      while (PillsFile >> medicine.Name >> medicine.Price >> medicine.Quantity)
+      {
+         if (medicine.Quantity == 0)
+         {
+            cout << medicine.Name << endl;
+         }
+      }
+      PillsFile.close();
+   }
+
+   void StockAmount()
 {
+   // function for displaying the total number of medications 
+
    ifstream PillsFile("pills.txt");
 
    if(!PillsFile){
@@ -190,6 +208,8 @@ void StockAmount()
 
 void Search()
 {
+   // drug search function
+
    cout << "Enter a search query: \n";
    string line, medicineName;
    cin >> medicineName;
@@ -219,6 +239,8 @@ void Search()
 
 void ChangePrice()
 {
+   // function for changing the price of medicines
+
    vector<Pill> pillsVector;
    Pill medicine;
    string pillName;
@@ -270,6 +292,8 @@ void ChangePrice()
 }
 
 void Order(){
+   //function for ordering medicines
+
    Pill medicine;
    cout << "Write the name of the medicine: ";
    cin >> medicine.Name;
@@ -285,6 +309,8 @@ void Order(){
 
 void Sell()
 {
+   // function for selling medicines
+
    string medicineName;
    int quantity;
    char discountChoice;
@@ -389,6 +415,8 @@ void Sell()
 }
 
 void MedicineForDelivery(){
+   // function for displaying a list of medicines for delivery
+
    Pill Medicine;
    ifstream PillsFile("pills.txt");
 
@@ -421,6 +449,8 @@ void MedicineForDelivery(){
 }
 
 void DeliveredMedicines(){
+   // function for displaying a list of delivered medicines
+
    ifstream DeliveredMedicinesFile("delivered_farm.txt");
 
    if(!DeliveredMedicinesFile){
@@ -436,7 +466,9 @@ void DeliveredMedicines(){
    DeliveredMedicinesFile.close();
 }
 
-void DeliverMedicine(){
+void DeliverMedicine(){ 
+   // function for drug delivery
+
    char deliverMoreChoice;
    do{
       string medicineName;
@@ -499,6 +531,8 @@ void DeliverMedicine(){
 }
 
 void Information(){
+   // function for displaying general information about the program
+
    cout << R"(
       "Pharmacy automation".
 
@@ -511,7 +545,11 @@ Note:
    )";
 }
 
+
 void Logout(){
+
+   // function to exit the program
+
    cout << "The program is completed, we will be glad to see you back! \n";
 }
 
@@ -570,7 +608,7 @@ int main()
          }
       }
       else
-      { // that means AccountType is Supplier
+      { // AccountType is Supplier
          cout << R"(
             Greetings dear Supplier! Please dial the menu number to work with the program, if finished, then dial 6:
 
